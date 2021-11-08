@@ -1,0 +1,61 @@
+[{
+"id": "da6cacdc-2a0a-410f-9ebd-059d3b2e2001",
+"color": "#1f78b44d",
+"png_index": [
+31,
+120,
+180
+],
+"name": "Lecheny",
+"type": "object"
+}, {
+"id": "01940137-eae1-4e68-a97f-3a767733b86b",
+"color": "#e31a1c4d",
+"png_index": [
+227,
+26,
+28
+],
+"name": "Normal",
+"type": "object"
+}, {
+"id": "13b6032a-d322-47f0-ad18-0ae5092ffa2e",
+"color": "#b159284d",
+"png_index": [
+177,
+89,
+40
+],
+"name": "Implant",
+"type": "object"
+}, {
+"id": "765c1b74-980b-4781-95d8-08643c078928",
+"color": "#6a3d9a4d",
+"png_index": [
+106,
+61,
+154
+],
+"name": "Most",
+"type": "object"
+}, {
+"id": "d99a2b3d-742f-4e5e-a77d-aceeadfd3f89",
+"color": "#e9b4f5cc",
+"png_index": [
+233,
+180,
+245
+],
+"name": "Koronka",
+"type": "object"
+}, {
+"id": "ac8515e0-6f90-4d17-a1e9-c4be4e093ea6",
+"color": "#24cfc34d",
+"png_index": [
+36,
+207,
+195
+],
+"name": "Caries",
+"type": "object"
+}]
