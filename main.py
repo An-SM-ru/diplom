@@ -172,8 +172,8 @@ def my_graf(epoch, logs):
     time_cur += time_close  # Суммируем прошедшее время с начала всех эпох
     time_all = round(epoch_all * (time_cur / (epoch + 1)), 1)  # Вычисляем общее время, как среднее * кол-во эпох
     time_ost = round(time_all - time_cur, 1)  # Вычисляем сколько времени осталось до конца расчета
-    print('Прошло ', round(time_cur, 1), \
-          'сек. | осталось ', time_ost, \
+    print('Прошло ', round(time_cur, 1),
+          'сек. | осталось ', time_ost,
           'сек. | из ', time_all, 'сек.')
     print('Последнее значение обучения\n', logs_[-5:])
     print('Максимальное значение обучения val_', metrika, '\n', logs_['val_' + metrika].max())
@@ -191,8 +191,8 @@ def my_time(epoch, logs):
     time_cur += time_close  # Суммируем прошедшее время с начала всех эпох
     time_all = round(epoch_all * (time_cur / (epoch + 1)), 1)  # Вычисляем общее время, как среднее * кол-во эпох
     time_ost = round(time_all - time_cur, 1)  # Вычисляем сколько времени осталось до конца расчета
-    print('Прошло ', round(time_cur, 1), \
-          'сек. | осталось ', time_ost, \
+    print('Прошло ', round(time_cur, 1),
+          'сек. | осталось ', time_ost,
           'сек. | из ', time_all, 'сек.')
     # print(stroka_vyvod)
 
@@ -219,11 +219,11 @@ def my_init(logs):
 
 # Параметры для функции callback
 # Прерывание обучение при не изменной ошибке
-stop = keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, \
+stop = keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0,
                                      patience=39, verbose=1, mode='auto', baseline=None, restore_best_weights=True)
 # Измененение шага для оптимизатора при стагнации ошибки
-reduce_lr = keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.3, \
-                                              patience=33, verbose=1, \
+reduce_lr = keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.3,
+                                              patience=33, verbose=1,
                                               mode='auto', cooldown=1, min_lr=1e-15)
 
 # Коллбэки
@@ -245,7 +245,7 @@ load_img(f'D:/ASmirnov/AI/diplom/orig/I74485_.png', color_mode = 'grayscale')
 # - бирюзовый - кариес на зубе
 # - коричневый - имплант
 
-load_img(f'D:/ASmirnov/AI/diplom/mask/I74485.png')
+load_img(f'mask/I74485.png')
 
 # Задаем первоначальные параметры
 img_width = 400
@@ -257,15 +257,15 @@ img_height = 200
 # Помещаем в два массива
 X_image = []
 X_image_mask = []
-for filename in os.listdir(f'D:/ASmirnov/AI/diplom/mask/'):
+for filename in os.listdir(f'mask/'):
     filename = filename[:-4]  # Получаем только имя файла
     # Получаем снимок ОПТГ ,target_size=(img_height, img_width)
-    optg = (np.asarray(keras.utils.load_img(f'D:/ASmirnov/AI/diplom/orig/jpg/{filename}_.jpg',
+    optg = (np.asarray(keras.utils.load_img(f'orig/jpg/{filename}_.jpg',
                                 target_size=(img_height, img_width),
                                 color_mode='grayscale')) / 256)
     # optg = Image.open(f'D:/ASmirnov/AI/diplom/orig/{filename}_.png')
     # Получаем маску снимка ОПТГ
-    mask = (np.asarray(load_img(f'D:/ASmirnov/AI/diplom/mask/{filename}.png',
+    mask = (np.asarray(load_img(f'mask/{filename}.png',
                                 target_size=(img_height, img_width)))).astype('uint8')
     # Записываем в массив
     X_image.append(optg)
@@ -310,7 +310,13 @@ X_image.shape
 X_image_mask.shape
 
 # Показываем несколько примеров
-ttt = 12
+ttt = 7
+plt.imshow(X_image[ttt], cmap='gray')  # Здесь есть импланты, мосты, леченые, нормальные
+plt.show()
+plt.imshow(X_image_mask[ttt])
+plt.show()
+
+ttt = 9
 plt.imshow(X_image[ttt], cmap='gray')  # Здесь есть импланты, мосты, леченые, нормальные
 plt.show()
 plt.imshow(X_image_mask[ttt])
@@ -318,14 +324,14 @@ plt.show()
 
 ### Определяем цветовые категории
 
-ttt = 21
+ttt = 8
 plt.imshow(X_image[ttt], cmap='gray')  # Здесь есть мосты, леченые, нормальные, коронки
 plt.show()
 plt.imshow(X_image_mask[ttt])  # Вывод маски для примера в цвете
 plt.show()
 
 # Вывод уникальных значений цветов по всем маскам и сохраняем в массив
-img_ = 21  # анализируем 6 изображение, тут есть все категории, по цветам
+img_ = 8  # анализируем 6 изображение, тут есть все категории, по цветам
 colors_ = []  # будем хранить значения по каналам и сумму всех каналов
 num_classes_ = []  # сумму цветных каналов, для сегментации
 for h in range(img_height):
@@ -406,7 +412,7 @@ def rgbToohe(y, num_classes):
     yt = yt.reshape(y2.shape[0], y2.shape[1], num_classes)  # Решейпим к исходныму размеру
     return yt  # Возвращаем сформированный массив
 
-
+print('ФОРМИРУЕМ yTrain')
 # Функция формирования yTrain
 def yt_prep(data, num_classes):
     yTrain = []  # Создаем пустой список под карты сегметации
@@ -431,8 +437,8 @@ for img in val_images:  # Проходим по всем изображения�
     xVal.append(img)  # Добавляем очередной элемент в xTrain
 xVal = np.array(xVal)  # Переводим в numpy
 
-print(xTrain.shape)  # Размерность обучающей выборки
-print(xVal.shape)  # Размерность проверочной выборки
+print('Размерность обучающей выборки   ', xTrain.shape)  # Размерность обучающей выборки
+print('Размерность проверочной выборки ', xVal.shape)  # Размерность проверочной выборки
 
 cur_time = time.time()  # Засекаем текущее время
 yTrain = yt_prep(train_segments, len(num_classes_) + 1)  # Создаем yTrain
@@ -459,6 +465,7 @@ print('Время обработки: ', round(time.time() - cur_time, 2), 'c') 
     - input_shape - размерность карты сегментации
 '''
 
+print('TESTING MODEL...\n')
 
 def unet(num_classes=7, input_shape=(img_height, img_width, 3), \
          act_f=False, act='elu', cnt_max=0, do=False, dozn=0.5, ax=1, \
@@ -898,9 +905,9 @@ def unet(num_classes=7, input_shape=(img_height, img_width, 3), \
     return model  # Возвращаем сформированную модель
 
 
-def unet_new(num_classes=7, input_shape=(img_height, img_width, 3), \
-             act_f=False, act='elu', cnt_max=0, do=False, dozn=0.5, ax=1, \
-             lrl=True, alpha=0.3, psp=False, bn=False, instN=True, \
+def unet_new(num_classes=7, input_shape=(img_height, img_width, 3),
+             act_f=False, act='elu', cnt_max=0, do=False, dozn=0.5, ax=1,
+             lrl=True, alpha=0.3, psp=False, bn=False, instN=True,
              j_con=True):
     inputs = Input(img_height, img_width, 3)
 
@@ -993,14 +1000,14 @@ ax = 3,                     # Значение axis InstanceNormalization, 3
 j_con = True                # Использовать concatenate, y/n, True
 '''
 # Создаем модель unet
-modelUnet = unet(len(num_classes_) + 1, (img_height, img_width, 1), \
-                 act_f=True, act='elu', \
-                 cnt_max=0, \
-                 do=False, dozn=0.2, \
-                 lrl=False, alpha=0.4, \
-                 psp=True, \
-                 bn=True, \
-                 instN=True, ax=3, \
+modelUnet = unet(len(num_classes_) + 1, (img_height, img_width, 1),
+                 act_f=True, act='elu',
+                 cnt_max=0,
+                 do=False, dozn=0.2,
+                 lrl=False, alpha=0.4,
+                 psp=True,
+                 bn=True,
+                 instN=True, ax=3,
                  j_con=True,
                  kern_1=13, kern_2=13, kern_3=5, kern_4=3)
 
@@ -1220,8 +1227,8 @@ def NewImage(model, n_classes=7, path=''):
     delit = 1
     if np.asarray(load_img(path, grayscale=True)).max() > 256:
         delit = 256
-    newimg = (np.asarray(load_img(path, \
-                                  target_size=(img_height, img_width), \
+    newimg = (np.asarray(load_img(path,
+                                  target_size=(img_height, img_width),
                                   grayscale=True)) / delit).astype('uint8')
     print('image', newimg.reshape(1, img_height, img_width, 1).shape)
     predict = np.array(model.predict(newimg.reshape(1, img_height, img_width, 1)))  # Предиктим картинку
