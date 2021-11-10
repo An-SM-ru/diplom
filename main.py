@@ -1,25 +1,23 @@
-import tensorflow as tf
-from IPython.core.display import clear_output
-from keras.initializers.initializers_v2 import RandomNormal
-from scipy.constants import hp
+#import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras.optimizers import Adam, Adadelta, SGD, Adagrad, RMSprop, Ftrl, Adamax
+from keras import utils
+from keras import backend as K
+from keras.initializers.initializers_v2 import RandomNormal
+from keras.optimizers.optimizer_v2 import Adadelta, Adam, SGD, Adagrad, RMSprop, Ftrl, Adamax
 
-from tensorflow.keras import utils
-from tensorflow.keras import backend as K
-from keras.models import Sequential, Model
+from keras.models.model_v2 import Sequential, Model
 from keras.layers import Dense, BatchNormalization, Dropout, Flatten
 from keras.layers import add, Convolution2D, concatenate, Input, MaxPooling2D, Conv2D
 from keras.layers import Activation, LeakyReLU, Average, Maximum, Subtract, Multiply
 from keras.layers import Conv2DTranspose, UpSampling2D
 from keras.preprocessing.image import img_to_array, load_img
 from keras.callbacks import LambdaCallback
-#from keras.initializers import RandomNormal
 #from sklearn.model_selection import train_test_split
-#from IPython.display import clear_output
 from PIL import Image
+from IPython.core.display import clear_output
+#from scipy.constants import hp
 
-import tensorflow_addons as tfa
+#import tensorflow_addons as tfa
 from tensorflow_addons.layers.normalizations import InstanceNormalization
 
 
@@ -36,8 +34,6 @@ import sys
 #sys.path.append('D:\ASmirnov\AI\diplom\venv')
 #import module_func
 #from menpo.shape import bounding_box
-
-from tensorflow import keras
 
 
 def grafik(to_array, tip=''):
@@ -235,7 +231,7 @@ init = LambdaCallback(on_train_begin=my_init)  # Начало обучения, 
 # Загрузка снимков
 
 # Пример снимка ОПТГ, разбитых по категориям.
-load_img(f'D:/ASmirnov/AI/diplom/orig/I74485_.png', color_mode = 'grayscale')
+load_img(f'orig/I74485_.png', color_mode = 'grayscale')
 
 # Пример созданных масок, разбитых по категориям.
 # - голубой - леченый зуб
@@ -263,7 +259,7 @@ for filename in os.listdir(f'mask/'):
     optg = (np.asarray(keras.utils.load_img(f'orig/jpg/{filename}_.jpg',
                                 target_size=(img_height, img_width),
                                 color_mode='grayscale')) / 256)
-    # optg = Image.open(f'D:/ASmirnov/AI/diplom/orig/{filename}_.png')
+    # optg = Image.open(f'orig/{filename}_.png')
     # Получаем маску снимка ОПТГ
     mask = (np.asarray(load_img(f'mask/{filename}.png',
                                 target_size=(img_height, img_width)))).astype('uint8')
@@ -467,11 +463,11 @@ print('Время обработки: ', round(time.time() - cur_time, 2), 'c') 
 
 print('TESTING MODEL...\n')
 
-def unet(num_classes=7, input_shape=(img_height, img_width, 3), \
-         act_f=False, act='elu', cnt_max=0, do=False, dozn=0.5, ax=1, \
-         lrl=True, alpha=0.3, psp=False, bn=False, instN=True, \
+def unet(num_classes=7, input_shape=(img_height, img_width, 3),
+         act_f=False, act='elu', cnt_max=0, do=False, dozn=0.5, ax=1,
+         lrl=True, alpha=0.3, psp=False, bn=False, instN=True,
          j_con=True, kern_1=7, kern_2=5, kern_3=3, kern_4=2):
-    activation_choice = hp.Choice('activation', values=['relu', 'sigmoid', 'tanh', 'elu', 'selu'])
+    #activation_choice = hp.Choice('activation', values=['relu', 'sigmoid', 'tanh', 'elu', 'selu'])
 
     init_k = RandomNormal(mean=0.0, stddev=0.02, seed=42)
 
