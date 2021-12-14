@@ -1,25 +1,28 @@
-#import tensorflow as tf
-from tensorflow import keras
-from keras import utils
-from keras import backend as K
-from keras.initializers.initializers_v2 import RandomNormal
-from keras.optimizers.optimizer_v2 import Adadelta, Adam, SGD, Adagrad, RMSprop, Ftrl, Adamax
+import tensorflow as tf
+# import keras
+from tensorflow.keras import utils
+from tensorflow.keras import backend as K
+from tensorflow.keras.initializers import RandomNormal
+from tensorflow.keras.optimizers import Adadelta, Adam, SGD, Adagrad, RMSprop, Ftrl, Adamax
+# importtensorflow. keras.optimizer_v2.adadelta
 
-from keras.models.model_v2 import Sequential, Model
-from keras.layers import Dense, BatchNormalization, Dropout, Flatten
-from keras.layers import add, Convolution2D, concatenate, Input, MaxPooling2D, Conv2D
-from keras.layers import Activation, LeakyReLU, Average, Maximum, Subtract, Multiply
-from keras.layers import Conv2DTranspose, UpSampling2D
-from keras.preprocessing.image import img_to_array, load_img
-from keras.callbacks import LambdaCallback
-#from sklearn.model_selection import train_test_split
+
+# noinspection PyUnresolvedReferences
+from tensorflow.keras import Sequential
+from tensorflow.keras import Model
+from tensorflow.keras.layers import Dense, BatchNormalization, Dropout, Flatten
+from tensorflow.keras.layers import add, Convolution2D, concatenate, Input, MaxPooling2D, Conv2D
+from tensorflow.keras.layers import Activation, LeakyReLU, Average, Maximum, Subtract, Multiply
+from tensorflow.keras.layers import Conv2DTranspose, UpSampling2D
+from tensorflow.keras.preprocessing.image import img_to_array, load_img
+from tensorflow.keras.callbacks import LambdaCallback
+# from sklearn.model_selection import train_test_split
 from PIL import Image
 from IPython.core.display import clear_output
-#from scipy.constants import hp
+# from scipy.constants import hp
 
-#import tensorflow_addons as tfa
+# import tensorflow_addons as tfa
 from tensorflow_addons.layers.normalizations import InstanceNormalization
-
 
 import numpy as np
 import pandas as pd
@@ -31,9 +34,11 @@ import os
 import gc
 
 import sys
-#sys.path.append('D:\ASmirnov\AI\diplom\venv')
-#import module_func
-#from menpo.shape import bounding_box
+
+
+# sys.path.append('D:\ASmirnov\AI\diplom\venv')
+# import module_func
+# from menpo.shape import bounding_box
 
 
 def grafik(to_array, tip=''):
@@ -215,12 +220,13 @@ def my_init(logs):
 
 # Параметры для функции callback
 # Прерывание обучение при не изменной ошибке
-stop = keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0,
-                                     patience=39, verbose=1, mode='auto', baseline=None, restore_best_weights=True)
+stop = tf.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0,
+                                                patience=39, verbose=1, mode='auto', baseline=None,
+                                                restore_best_weights=True)
 # Измененение шага для оптимизатора при стагнации ошибки
-reduce_lr = keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.3,
-                                              patience=33, verbose=1,
-                                              mode='auto', cooldown=1, min_lr=1e-15)
+reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.3,
+                                                         patience=33, verbose=1,
+                                                         mode='auto', cooldown=1, min_lr=1e-15)
 
 # Коллбэки
 pltGraf = LambdaCallback(on_epoch_end=my_graf)  # Конец эпохи
@@ -231,7 +237,7 @@ init = LambdaCallback(on_train_begin=my_init)  # Начало обучения, 
 # Загрузка снимков
 
 # Пример снимка ОПТГ, разбитых по категориям.
-load_img(f'orig/I74485_.png', color_mode = 'grayscale')
+load_img(f'orig/I74485_.png', color_mode='grayscale')
 
 # Пример созданных масок, разбитых по категориям.
 # - голубой - леченый зуб
@@ -256,9 +262,9 @@ X_image_mask = []
 for filename in os.listdir(f'mask/'):
     filename = filename[:-4]  # Получаем только имя файла
     # Получаем снимок ОПТГ ,target_size=(img_height, img_width)
-    optg = (np.asarray(keras.utils.load_img(f'orig/jpg/{filename}_.jpg',
-                                target_size=(img_height, img_width),
-                                color_mode='grayscale')) / 256)
+    optg = (np.asarray(tf.keras.utils.load_img(f'orig/jpg/{filename}_.jpg',
+                                            target_size=(img_height, img_width),
+                                            color_mode='grayscale')) / 256)
     # optg = Image.open(f'orig/{filename}_.png')
     # Получаем маску снимка ОПТГ
     mask = (np.asarray(load_img(f'mask/{filename}.png',
@@ -408,7 +414,10 @@ def rgbToohe(y, num_classes):
     yt = yt.reshape(y2.shape[0], y2.shape[1], num_classes)  # Решейпим к исходныму размеру
     return yt  # Возвращаем сформированный массив
 
+
 print('ФОРМИРУЕМ yTrain')
+
+
 # Функция формирования yTrain
 def yt_prep(data, num_classes):
     yTrain = []  # Создаем пустой список под карты сегметации
@@ -446,11 +455,11 @@ print('Время обработки: ', round(time.time() - cur_time, 2), 'c') 
 
 # Tuner настройки
 
-#pip
-#install - U
-#keras - tuner
+# pip
+# install - U
+# keras - tuner
 
-#from kerastuner.tuners import RandomSearch, Hyperband, BayesianOptimization
+# from kerastuner.tuners import RandomSearch, Hyperband, BayesianOptimization
 
 ## Создание пилотной модели
 
@@ -463,11 +472,12 @@ print('Время обработки: ', round(time.time() - cur_time, 2), 'c') 
 
 print('TESTING MODEL...\n')
 
+
 def unet(num_classes=7, input_shape=(img_height, img_width, 3),
          act_f=False, act='elu', cnt_max=0, do=False, dozn=0.5, ax=1,
          lrl=True, alpha=0.3, psp=False, bn=False, instN=True,
          j_con=True, kern_1=7, kern_2=5, kern_3=3, kern_4=2):
-    #activation_choice = hp.Choice('activation', values=['relu', 'sigmoid', 'tanh', 'elu', 'selu'])
+    # activation_choice = hp.Choice('activation', values=['relu', 'sigmoid', 'tanh', 'elu', 'selu'])
 
     init_k = RandomNormal(mean=0.0, stddev=0.02, seed=42)
 
@@ -1148,8 +1158,8 @@ grafik(result, 'dice_coef')
 #### Распознавание
 
 # Сохраняем модель и веса
-modelUnet.save('/content/drive/My Drive/_AI/_diplom/modelUnet_.h5')
-modelUnet.save_weights('/content/drive/My Drive/_AI/_diplom/weightsUnet_.h5')
+modelUnet.save('/modelUnet_.h5')
+modelUnet.save_weights('/weightsUnet_.h5')
 
 
 # modelUnet_ = keras.models.load_model('/content/drive/My Drive/_AI/_diplom/modelUnet_')
@@ -1255,39 +1265,39 @@ def NewImage(model, n_classes=7, path=''):
     plt.show()
 
 
-ppp = f'/content/drive/My Drive/_AI/_diplom/test/I105049.png'
+ppp = f'/test/I105049.png'
 NewImage(modelUnet, 7, ppp)
 
 # Из интернета
-ppp = f'/content/drive/My Drive/_AI/_diplom/test/001.jpg'
+ppp = f'/test/001.jpg'
 NewImage(modelUnet, 7, ppp)
 
 # Из интернета
-ppp = f'/content/drive/My Drive/_AI/_diplom/test/002.jpg'
+ppp = f'/test/002.jpg'
 NewImage(modelUnet, 7, ppp)
 
 # Из интернета
-ppp = f'/content/drive/My Drive/_AI/_diplom/test/003.jpg'
+ppp = f'/test/003.jpg'
 NewImage(modelUnet, 7, ppp)
 
 # Из интернета
-ppp = f'/content/drive/My Drive/_AI/_diplom/test/004.jpg'
+ppp = f'/test/004.jpg'
 NewImage(modelUnet, 7, ppp)
 
 # Из интернета
-ppp = f'/content/drive/My Drive/_AI/_diplom/test/005.jpg'
+ppp = f'/test/005.jpg'
 NewImage(modelUnet, 7, ppp)
 
 # Из интернета
-ppp = f'/content/drive/My Drive/_AI/_diplom/test/006.jpg'
+ppp = f'/test/006.jpg'
 NewImage(modelUnet, 7, ppp)
 
 # Из интернета
-ppp = f'/content/drive/My Drive/_AI/_diplom/test/007.jpg'
+ppp = f'/test/007.jpg'
 NewImage(modelUnet, 7, ppp)
 
 # Из интернета
-ppp = f'/content/drive/My Drive/_AI/_diplom/test/008.jpg'
+ppp = f'/test/008.jpg'
 NewImage(modelUnet, 7, ppp)
 
 # Случайный снимок из интернета
